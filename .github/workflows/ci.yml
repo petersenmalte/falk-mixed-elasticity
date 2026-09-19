@@ -27,6 +27,9 @@ jobs:
       - name: Run postprocessing study
         run: python3 scripts/postprocessing_study.py
 
+      - name: Run adaptive study
+        run: python3 scripts/adaptive_study.py
+
       - name: Upload convergence results
         uses: actions/upload-artifact@v4
         with:

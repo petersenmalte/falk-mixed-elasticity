@@ -71,11 +71,26 @@ ones.
   [`src/falk_elasticity/postprocessing.py`](src/falk_elasticity/postprocessing.py),
   [`tests/test_postprocessing.py`](tests/test_postprocessing.py), and
   [`scripts/postprocessing_study.py`](scripts/postprocessing_study.py).
-- [ ] **Phase 4 — a posteriori error estimation & adaptivity.** The
-  reliable/efficient a posteriori estimator `η` for the postprocessed
-  eigenvalue, and the L-shaped domain (re-entrant corner, singular
-  eigenfunctions) and Cook's membrane benchmarks with adaptive mesh
-  refinement (Solve → Estimate → Mark → Refine).
+- [x] **Phase 4 — a posteriori error estimation & adaptivity, on the
+  L-shaped domain.** The reliable/efficient a posteriori estimator `η`
+  (Section 6) as a DG0 cellwise indicator, driving Doerfler (bulk-chasing)
+  marking and adaptive refinement via `dolfinx.mesh.refine`. On
+  `Ω = (-1,1)×(0,1) ∪ (-1,0)×(-1,0)` (Section 7.2), the eigenfunction is
+  singular at the re-entrant corner, so uniform refinement alone can't
+  recover the full rate — adaptivity is the point. See
+  [`src/falk_elasticity/domains.py`](src/falk_elasticity/domains.py),
+  [`src/falk_elasticity/estimator.py`](src/falk_elasticity/estimator.py),
+  [`src/falk_elasticity/adaptive.py`](src/falk_elasticity/adaptive.py),
+  [`tests/test_l_shaped.py`](tests/test_l_shaped.py),
+  [`tests/test_adaptive.py`](tests/test_adaptive.py), and
+  [`scripts/adaptive_study.py`](scripts/adaptive_study.py) (uniform vs.
+  adaptive convergence, reproducing the comparison in Figs. 16–22).
+- [ ] **Phase 5 — Cook's membrane.** Deferred: unlike the square and
+  L-shaped domains, it's clamped on only one edge and free elsewhere, which
+  needs genuine essential boundary conditions on the stress space
+  (`Σ_g` with `g=0` strongly enforced on the free edges) — a boundary
+  condition path Phases 1–4 don't exercise, since both existing domains use
+  pure Dirichlet data everywhere.
 
 ## Running it
 
