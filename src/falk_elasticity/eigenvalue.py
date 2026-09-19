@@ -72,9 +72,13 @@ def assemble_eigenproblem(
     )
     b_form = ufl.inner(u, v) * dx
 
-    A = assemble_matrix(fem.form(a_form), bcs=bcs, diagonal=1.0)
+    A = assemble_matrix(fem.form(a_form), bcs=bcs)
     A.assemble()
-    B = assemble_matrix(fem.form(b_form), bcs=bcs, diagonal=0.0)
+    # b_form never references sigma/gamma, so constrained dofs' rows/columns
+    # are already structurally zero here without passing bcs at all -- which
+    # is exactly the "formal eigenvalue of infinity" (1 in A, 0 in B) this
+    # needs, since this DOLFINx build has no user-settable diagonal fill.
+    B = assemble_matrix(fem.form(b_form))
     B.assemble()
     return W, A, B
 
