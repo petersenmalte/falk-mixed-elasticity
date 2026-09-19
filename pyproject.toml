@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "falk-elasticity"
+version = "0.1.0"
+description = "FEniCSx implementation of the Falk mixed finite element for linear elasticity with weakly imposed symmetry"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Malte Petersen"}]
+requires-python = ">=3.10"
+dependencies = [
+    "matplotlib",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

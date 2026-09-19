@@ -1,0 +1,11 @@
+name: falk-elasticity
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - fenics-dolfinx
+  - mpich
+  - matplotlib
+  - numpy
+  - pytest
+  - pip
