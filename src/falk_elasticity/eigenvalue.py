@@ -34,9 +34,25 @@ def assemble_eigenproblem(
     lmbda: float,
     mu: float,
     quadrature_degree: int = 16,
+    bcs: list | None = None,
+    W: fem.FunctionSpace | None = None,
 ):
-    """Assemble the pencil (A, B) for the order-k Falk eigenvalue problem."""
-    W = falk_function_space(domain, k)
+    """Assemble the pencil (A, B) for the order-k Falk eigenvalue problem.
+
+    bcs constrain stress dofs (e.g. sigma.n = 0 on a free/Neumann boundary,
+    see domains.cooks_membrane_neumann_bcs); the pure-Dirichlet-everywhere
+    domains (square, L-shape) need none, since u = 0 there is natural. A
+    constrained dof gets a formal eigenvalue of infinity -- diagonal 1 in A,
+    0 in B -- so it can never be mistaken for a physical mode near a finite
+    target.
+
+    W can be passed in already built, since constructing bcs on a sub-space
+    (as cooks_membrane_neumann_bcs does) needs W to exist first; otherwise
+    it's built here as before.
+    """
+    bcs = bcs or []
+    if W is None:
+        W = falk_function_space(domain, k)
     sigma0, sigma1, u, q = ufl.TrialFunctions(W)
     tau0, tau1, v, p = ufl.TestFunctions(W)
 
@@ -56,9 +72,9 @@ def assemble_eigenproblem(
     )
     b_form = ufl.inner(u, v) * dx
 
-    A = assemble_matrix(fem.form(a_form))
+    A = assemble_matrix(fem.form(a_form), bcs=bcs, diagonal=1.0)
     A.assemble()
-    B = assemble_matrix(fem.form(b_form))
+    B = assemble_matrix(fem.form(b_form), bcs=bcs, diagonal=0.0)
     B.assemble()
     return W, A, B
 

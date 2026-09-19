@@ -4,7 +4,6 @@ __pycache__/
 .eggs/
 build/
 dist/
-results/
 .pytest_cache/
 .ipynb_checkpoints/
 .DS_Store

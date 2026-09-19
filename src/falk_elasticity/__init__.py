@@ -1,6 +1,11 @@
 from .adaptive import doerfler_mark, refine_marked
 from .convergence import errors_at, loglog_rate
-from .domains import create_l_shaped_mesh
+from .domains import (
+    cooks_membrane_eigenvalue_pair_at,
+    cooks_membrane_neumann_bcs,
+    create_cooks_membrane_mesh,
+    create_l_shaped_mesh,
+)
 from .eigenvalue import assemble_eigenproblem, solve_eigenproblem
 from .elements import as_skew, as_stress, falk_function_space
 from .estimator import eigenvalue_estimator, global_estimator, solve_estimate
@@ -30,4 +35,7 @@ __all__ = [
     "solve_estimate",
     "doerfler_mark",
     "refine_marked",
+    "create_cooks_membrane_mesh",
+    "cooks_membrane_neumann_bcs",
+    "cooks_membrane_eigenvalue_pair_at",
 ]

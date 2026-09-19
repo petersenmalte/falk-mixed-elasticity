@@ -85,12 +85,22 @@ ones.
   [`tests/test_adaptive.py`](tests/test_adaptive.py), and
   [`scripts/adaptive_study.py`](scripts/adaptive_study.py) (uniform vs.
   adaptive convergence, reproducing the comparison in Figs. 16–22).
-- [ ] **Phase 5 — Cook's membrane.** Deferred: unlike the square and
-  L-shaped domains, it's clamped on only one edge and free elsewhere, which
-  needs genuine essential boundary conditions on the stress space
-  (`Σ_g` with `g=0` strongly enforced on the free edges) — a boundary
-  condition path Phases 1–4 don't exercise, since both existing domains use
-  pure Dirichlet data everywhere.
+- [x] **Phase 5 — Cook's membrane.** The classic tapered-panel benchmark
+  (corners `(0,0)`, `(48,44)`, `(48,60)`, `(0,44)`), clamped on the left
+  edge and free elsewhere — the first domain here needing genuine essential
+  boundary conditions on the stress space (`σ·n=0` strongly enforced on the
+  free edges, via `dirichletbc` on the two BDM row sub-spaces), rather than
+  the fully-natural Dirichlet case the square and L-shaped domains use. The
+  mesh is a bilinear (transfinite) map of a structured reference grid onto
+  the tapered quadrilateral. There's no independent reference eigenvalue
+  for this domain (unlike the square and L-shape), so it's verified by
+  self-consistency under refinement instead. See
+  [`src/falk_elasticity/domains.py`](src/falk_elasticity/domains.py),
+  [`tests/test_cooks_membrane.py`](tests/test_cooks_membrane.py), and
+  [`scripts/cooks_membrane_study.py`](scripts/cooks_membrane_study.py).
+
+CI regenerates and commits `results/*.{csv,png}` on every push to `main`,
+so the numbers above are always live, not a one-time snapshot.
 
 ## Running it
 
