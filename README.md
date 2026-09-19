@@ -59,11 +59,23 @@ ones.
   [`src/falk_elasticity/eigenvalue.py`](src/falk_elasticity/eigenvalue.py),
   [`tests/test_eigenvalue.py`](tests/test_eigenvalue.py), and
   [`scripts/eigenvalue_study.py`](scripts/eigenvalue_study.py).
-- [ ] **Phase 3 — postprocessing & adaptivity.** The element-local
-  postprocessing that improves the eigenvalue rate to `O(h^{2k+2})`
-  (observed *super*convergence for `k=1`), the reliable/efficient a
-  posteriori estimator `η`, and the L-shaped domain (re-entrant corner) and
-  Cook's membrane benchmarks with adaptive refinement.
+- [x] **Phase 3 — the postprocessing.** The thesis's actual contribution:
+  a cheap, element-local solve (eq. 52/53) that turns `(σ_h, u_h, γ_h)` into
+  a postprocessed eigenpair `(κ*_h, u*_h)` via the Rayleigh quotient of
+  Definition 5.5, improving the eigenvalue rate from `O(h^{2k})` to
+  `O(h^{2k+2})` (Theorem 5.7) — with observed *super*convergence beyond that
+  for the lowest-order element, `k=1`, reproduced numerically here too. The
+  postprocessing is itself block-diagonal (broken trial/test spaces, no
+  facet terms), so it's implemented as a single assembly rather than a
+  per-triangle loop — see
+  [`src/falk_elasticity/postprocessing.py`](src/falk_elasticity/postprocessing.py),
+  [`tests/test_postprocessing.py`](tests/test_postprocessing.py), and
+  [`scripts/postprocessing_study.py`](scripts/postprocessing_study.py).
+- [ ] **Phase 4 — a posteriori error estimation & adaptivity.** The
+  reliable/efficient a posteriori estimator `η` for the postprocessed
+  eigenvalue, and the L-shaped domain (re-entrant corner, singular
+  eigenfunctions) and Cook's membrane benchmarks with adaptive mesh
+  refinement (Solve → Estimate → Mark → Refine).
 
 ## Running it
 

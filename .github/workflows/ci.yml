@@ -24,6 +24,9 @@ jobs:
       - name: Run eigenvalue study
         run: python3 scripts/eigenvalue_study.py
 
+      - name: Run postprocessing study
+        run: python3 scripts/postprocessing_study.py
+
       - name: Upload convergence results
         uses: actions/upload-artifact@v4
         with:

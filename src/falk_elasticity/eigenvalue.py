@@ -63,8 +63,11 @@ def assemble_eigenproblem(
     return W, A, B
 
 
-def solve_eigenproblem(A: "PETSc.Mat", B: "PETSc.Mat", target_kappa: float, nev: int = 8) -> list[float]:
-    """Shift-and-invert around target_kappa; return the converged kappas.
+def solve_eigenproblem(A: "PETSc.Mat", B: "PETSc.Mat", target_kappa: float, nev: int = 8):
+    """Shift-and-invert around target_kappa; return a list of (kappa,
+    eigenvector_array) pairs, sorted by kappa. The eigenvector array is a
+    plain numpy array laid out exactly like a Function on the space A and B
+    were assembled from (see eigenvalue_pair_at in postprocessing.py).
 
     A and B are both symmetric, but B is singular, so this deliberately uses
     the general (non-Hermitian-exploiting) SLEPc pathway rather than GHEP,
@@ -92,5 +95,11 @@ def solve_eigenproblem(A: "PETSc.Mat", B: "PETSc.Mat", target_kappa: float, nev:
     E.solve()
 
     nconv = E.getConverged()
-    kappas = [-E.getEigenvalue(i).real for i in range(nconv)]
-    return sorted(kappas)
+    vr, vi = A.createVecs()
+    pairs = []
+    for i in range(nconv):
+        mu_i = E.getEigenvalue(i)
+        E.getEigenvector(i, vr, vi)
+        pairs.append((-mu_i.real, vr.array.copy()))
+    pairs.sort(key=lambda pair: pair[0])
+    return pairs

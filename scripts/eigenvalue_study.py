@@ -19,8 +19,9 @@ NS_BY_K = {1: [8, 16, 24, 32], 2: [8, 16, 24], 3: [8, 12, 16]}
 def closest_eigenvalue(n: int, k: int, nev: int = 8) -> float:
     domain = mesh.create_unit_square(MPI.COMM_WORLD, n, n, mesh.CellType.triangle)
     _, A, B = assemble_eigenproblem(domain, k, 1.0, 1.0)
-    kappas = solve_eigenproblem(A, B, REFERENCE_KAPPA, nev=nev)
-    return min(kappas, key=lambda kap: abs(kap - REFERENCE_KAPPA))
+    pairs = solve_eigenproblem(A, B, REFERENCE_KAPPA, nev=nev)
+    kappa, _ = min(pairs, key=lambda pair: abs(pair[0] - REFERENCE_KAPPA))
+    return kappa
 
 
 def main():

@@ -20,9 +20,10 @@ REFERENCE_KAPPA = 51.294997977322
 def closest_eigenvalue(n: int, k: int, nev: int = 8) -> float:
     domain = mesh.create_unit_square(MPI.COMM_WORLD, n, n, mesh.CellType.triangle)
     _, A, B = assemble_eigenproblem(domain, k, LMBDA, MU)
-    kappas = solve_eigenproblem(A, B, REFERENCE_KAPPA, nev=nev)
-    assert kappas, "no eigenvalues converged"
-    return min(kappas, key=lambda kap: abs(kap - REFERENCE_KAPPA))
+    pairs = solve_eigenproblem(A, B, REFERENCE_KAPPA, nev=nev)
+    assert pairs, "no eigenvalues converged"
+    kappa, _ = min(pairs, key=lambda pair: abs(pair[0] - REFERENCE_KAPPA))
+    return kappa
 
 
 def test_lowest_order_eigenvalue_converges():
