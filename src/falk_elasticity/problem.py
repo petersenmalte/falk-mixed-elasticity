@@ -4,6 +4,7 @@ boundary). There, Sigma_g = Sigma_0 is the full, unconstrained
 BDM_k(Omega; R^{2x2}) space and the Dirichlet data enters naturally -- no
 essential boundary condition needs to be assembled at all.
 """
+import numpy as np
 import ufl
 from dolfinx import fem, mesh
 from dolfinx.fem.petsc import LinearProblem
@@ -48,4 +49,12 @@ def solve_source_problem(
         petsc_options={"ksp_type": "preonly", "pc_type": "lu"},
         petsc_options_prefix="falk_source_problem_",
     )
-    return problem.solve()
+    wh = problem.solve()
+
+    reason = problem.solver.getConvergedReason()
+    if reason <= 0:
+        raise RuntimeError(f"PETSc KSP failed to converge (converged reason={reason})")
+    if not np.all(np.isfinite(wh.x.array)):
+        raise RuntimeError("solution contains non-finite values despite a converged KSP")
+
+    return wh
