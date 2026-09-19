@@ -46,7 +46,11 @@ def solve_source_problem(
         a,
         L,
         bcs=[],
-        petsc_options={"ksp_type": "preonly", "pc_type": "lu"},
+        petsc_options={
+            "ksp_type": "preonly",
+            "pc_type": "lu",
+            "pc_factor_mat_solver_type": "mumps",
+        },
         petsc_options_prefix="falk_source_problem_",
     )
     wh = problem.solve()
