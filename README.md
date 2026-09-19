@@ -49,10 +49,16 @@ ones.
   `‖σ-σ_h‖₀ + ‖γ-γ_h‖₀ = O(h^{k+1})`, `‖u-u_h‖₀ = O(h^k)`.
   See [`tests/test_convergence.py`](tests/test_convergence.py) and
   [`scripts/convergence_study.py`](scripts/convergence_study.py).
-- [ ] **Phase 2 — the eigenvalue problem.** The actual subject of the
-  thesis: elastic eigenfrequencies via SLEPc, reproducing the reference
-  eigenvalue `κ = 51.294997977322` (third eigenvalue, unit square, Dirichlet
-  data).
+- [x] **Phase 2 — the eigenvalue problem.** The actual subject of the
+  thesis: elastic eigenfrequencies via SLEPc shift-and-invert, reproducing
+  the reference eigenvalue `κ = 51.294997977322` (third eigenvalue, unit
+  square, Dirichlet data) and its `O(h^{2k})` convergence rate for `k=1`.
+  The eigenvalue problem reuses the exact same bilinear form as the source
+  problem, now paired against a mass form supported only on the
+  displacement block — see
+  [`src/falk_elasticity/eigenvalue.py`](src/falk_elasticity/eigenvalue.py),
+  [`tests/test_eigenvalue.py`](tests/test_eigenvalue.py), and
+  [`scripts/eigenvalue_study.py`](scripts/eigenvalue_study.py).
 - [ ] **Phase 3 — postprocessing & adaptivity.** The element-local
   postprocessing that improves the eigenvalue rate to `O(h^{2k+2})`
   (observed *super*convergence for `k=1`), the reliable/efficient a
