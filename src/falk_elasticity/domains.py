@@ -43,4 +43,4 @@ def create_l_shaped_mesh(comm, n: int) -> dmesh.Mesh:
     x = np.array(points, dtype=np.float64)
     c = np.array(cells, dtype=np.int64)
     coord_element = basix.ufl.element("Lagrange", basix.CellType.triangle, 1, shape=(2,))
-    return dmesh.create_mesh(comm, c, x, ufl.Mesh(coord_element))
+    return dmesh.create_mesh(comm, c, ufl.Mesh(coord_element), x)
