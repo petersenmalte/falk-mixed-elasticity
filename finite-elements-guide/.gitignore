@@ -1,0 +1,10 @@
+# LaTeX build artefacts (the PDF itself is committed on purpose)
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+*.synctex.gz
+
+__pycache__/
